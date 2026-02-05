@@ -13,8 +13,7 @@ import pandas as pd
 from multiprocessing import Pool
 
 
-warnings.filterwarnings("ignore", category=UserWarning)
-    
+warnings.filterwarnings("ignore", category=UserWarning)  
 def convert_data(config, simulated_file):
     output_path = Path(config.paths.converted_data) / config.simulation.name / config.grid_format.name / simulated_file.stem
     output_path.unlink(missing_ok=True)
