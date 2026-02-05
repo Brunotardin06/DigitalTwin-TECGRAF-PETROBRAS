@@ -1,0 +1,5 @@
+name: sim4validation
+duration_days: 1
+num_seed_elements: 2000
+time_step_minutes: 0.5
+output_time_step_minutes: 60

@@ -1,0 +1,26 @@
+defaults:
+  - simulation: s1
+  - experiment: default
+  - grid_format: g1
+  - environment: "2019"
+  - _self_
+
+paths:
+  raw_data: data/1-raw
+  simulation_data: data/2-simulated
+  converted_data: data/3-converted
+  prepared_data: data/4-prepared
+  # area_shapefile: ${paths.raw_data}/simulation_area/area.shp
+  # area_shapefile: documentos/feicoes_2024.zip
+  # plataformas_shp: ${paths.raw_data}/plataformas.zip
+  # plataformas_shp: ${paths.raw_data}/plataforms/Plataformas.zip
+  plataformas_shp: documentos/20_de_junho.zip
+
+copernicusmarine:
+  folder: marine_copernicus
+  specificities: ${environment}
+  buffer_dg: 3.0
+  min_long: -43.177087
+  max_long: -42.520887
+  min_lat: -25.478728
+  max_lat: -24.968139

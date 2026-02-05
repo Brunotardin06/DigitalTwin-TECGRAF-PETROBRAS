@@ -1,0 +1,10 @@
+name: deriva
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.11
+  - console_shortcut
+  - notebook
+  - opendrift
+  - pip

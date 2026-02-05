@@ -1,0 +1,22 @@
+name: s2
+number_of_simulations: 10
+buffer_area_dg: 3
+start_date: 2023-05-02
+end_date: 2025-05-01
+duration_days: 5
+max_leak_duration_hours: 12
+seed_radius_mean_m: 2000
+seed_radius_std_m: 500
+seed_radius_min_m: 1000
+num_seed_elements: 20000
+time_step_minutes: 1
+output_time_step_minutes: 60
+
+export_variables:
+  - water_content
+  # - mass_oil
+  # - land_binary_mask
+  # - x_sea_water_velocity
+  # - y_sea_water_velocity
+  # - x_wind
+  # - y_wind
