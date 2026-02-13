@@ -292,11 +292,10 @@ def plot_histogramdif(diff_u, diff_v, u_my, v_my):
     
     # Print bin edges for diff_u
     print("\nBins Diferença u:")
-    for i in range(len(bins_u) - 1):
-        if i == len(bins_u) - 2:  # Last bin is inclusive on both sides
-            print(f"  Bin {i+1}: [{bins_u[i]:.6f}, {bins_u[i+1]:.6f}] → {int(counts_u[i])} valores")
-        else:
-            print(f"  Bin {i+1}: [{bins_u[i]:.6f}, {bins_u[i+1]:.6f}) → {int(counts_u[i])} valores")
+    for i in range(len(counts_u)):
+        left_bracket = "["
+        right_bracket = "]" if i == len(counts_u) - 1 else ")"
+        print(f"  Bin {i+1}: {left_bracket}{bins_u[i]:.6f}, {bins_u[i+1]:.6f}{right_bracket} → {int(counts_u[i])} valores")
     
     # Histogram diff_v (normalized)
     counts_v, bins_v, patches_v = axes[1].hist(diff_v_norm, bins=n_bins, color='blue', alpha=0.7, edgecolor='black')
@@ -308,11 +307,10 @@ def plot_histogramdif(diff_u, diff_v, u_my, v_my):
     
     # Print bin edges for diff_v
     print("\nBins Diferença v:")
-    for i in range(len(bins_v) - 1):
-        if i == len(bins_v) - 2:  # Last bin is inclusive on both sides
-            print(f"  Bin {i+1}: [{bins_v[i]:.6f}, {bins_v[i+1]:.6f}] → {int(counts_v[i])} valores")
-        else:
-            print(f"  Bin {i+1}: [{bins_v[i]:.6f}, {bins_v[i+1]:.6f}) → {int(counts_v[i])} valores")
+    for i in range(len(counts_v)):
+        left_bracket = "["
+        right_bracket = "]" if i == len(counts_v) - 1 else ")"
+        print(f"  Bin {i+1}: {left_bracket}{bins_v[i]:.6f}, {bins_v[i+1]:.6f}{right_bracket} → {int(counts_v[i])} valores")
     
     # Histogram vector magnitude (normalized)
     counts_mag, bins_mag, patches_mag = axes[2].hist(mag_diff_norm, bins=n_bins, color='green', alpha=0.7, edgecolor='black')
@@ -323,11 +321,10 @@ def plot_histogramdif(diff_u, diff_v, u_my, v_my):
     
     # Print bin edges for magnitude
     print("\nBins Magnitude Vetorial:")
-    for i in range(len(bins_mag) - 1):
-        if i == len(bins_mag) - 2:  # Last bin is inclusive on both sides
-            print(f"  Bin {i+1}: [{bins_mag[i]:.6f}, {bins_mag[i+1]:.6f}] → {int(counts_mag[i])} valores")
-        else:
-            print(f"  Bin {i+1}: [{bins_mag[i]:.6f}, {bins_mag[i+1]:.6f}) → {int(counts_mag[i])} valores")
+    for i in range(len(counts_mag)):
+        left_bracket = "["
+        right_bracket = "]" if i == len(counts_mag) - 1 else ")"
+        print(f"  Bin {i+1}: {left_bracket}{bins_mag[i]:.6f}, {bins_mag[i+1]:.6f}{right_bracket} → {int(counts_mag[i])} valores")
     print("=" * 60)
     
     plt.suptitle(f'Distribuição dos Erros Normalizados (NRT - MY) | Norm: mag_MY_max = {mag_my_max:.4f} m/s', fontsize=16, weight='bold')
