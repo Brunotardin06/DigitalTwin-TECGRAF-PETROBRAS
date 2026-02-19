@@ -29,7 +29,6 @@ cmocean
 geojson
 coloredlogs
 copernicusmarine
-geopandas
 nc-time-axis
 pykdtree
 utm
@@ -38,3 +37,6 @@ scipy
 psutil
 flet
 opendrift
+os
+sys
+matplotlib
