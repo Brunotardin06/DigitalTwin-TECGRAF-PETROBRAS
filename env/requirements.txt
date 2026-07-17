@@ -1,40 +1,67 @@
+# =============================================================================
+# Deriva - dependencias da aplicacao
+# Instalacao:  pip install -r env/requirements.txt
+# Python alvo: 3.11 (ver env/conda.yaml)
+# =============================================================================
+
+# --- Nucleo cientifico -------------------------------------------------------
 numpy
-mlflow
+pandas
+scipy
+xarray
+netCDF4          # backend de leitura/escrita dos arquivos .nc do xarray
+nc-time-axis     # eixo temporal do matplotlib para dados netCDF
+
+# --- Geoespacial -------------------------------------------------------------
 geopandas
-scikit-learn
-scikit-image
-torch
-torchvision
-torchmetrics
-lightning
-einops
-seaborn
-streamlit
-rich
-click
-gdown
-omegaconf
-python-dotenv
-hydra-core
-copernicusmarine
+shapely
+pyproj
+cartopy
 rasterio
 
-pyproj
-xarray
-cartopy
-netCDF4 
-h5py
-roaring-landmask
-cmocean
-geojson
-coloredlogs
-copernicusmarine
-nc-time-axis
-pykdtree
-utm
-xhistogram
-scipy
-psutil
-flet
-opendrift
+# --- Simulacao de deriva -----------------------------------------------------
+opendrift        # motor de simulacao (OpenOil)
+cmocean          # colormaps oceanograficos usados pelo opendrift/plots
+
+# --- Imagem / plots ----------------------------------------------------------
 matplotlib
+Pillow           # PIL, usado em analysis/analiseVetorial.py
+imageio          # geracao de GIFs em compare_spills_gif.py
+scikit-image     # skimage.filters / skimage.morphology
+tqdm             # barras de progresso (convert.py)
+
+# --- Dados externos ----------------------------------------------------------
+copernicusmarine # download de correntes/vento do Copernicus Marine
+
+# --- App / CLI / config ------------------------------------------------------
+flet==0.28.3     # interface grafica (o codigo usa a API classica: ft.border.all,
+                 # ft.dropdown.Option, etc. — removidas no Flet 1.x/0.7x+. NAO subir.)
+click            # CLI (simulate.py)
+hydra-core       # gestao de configuracao (conf/)
+omegaconf        # dependencia do hydra, usada diretamente na config
+python-dotenv    # leitura de variaveis de ambiente (.env)
+
+# =============================================================================
+# OPCIONAIS - nao sao importados por nenhum modulo da aplicacao atual.
+# Descomente apenas se for retomar treino de ML / dashboards / tracking.
+# Mante-los instalados so deixa o ambiente mais pesado e propenso a conflitos.
+# -----------------------------------------------------------------------------
+# mlflow            # tracking de experimentos (referenciado no MLproject)
+# torch             # deep learning
+# torchvision
+# torchmetrics
+# lightning
+# einops
+# scikit-learn
+# seaborn
+# streamlit         # dashboards
+# rich
+# gdown             # download de arquivos do Google Drive
+# geojson
+# coloredlogs
+# h5py
+# roaring-landmask  # (dependencia opcional do opendrift; instalada se necessario)
+# pykdtree
+# utm
+# xhistogram
+# psutil

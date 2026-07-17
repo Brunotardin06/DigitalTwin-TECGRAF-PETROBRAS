@@ -2,6 +2,9 @@
 documentos/
 __pycache__/
 *.pyc
+.venv/
+venv/
+env/.venv/
 analysis/*.nc
 analysis/BaixadoDia4/
 analysis/BaixadoDia5/

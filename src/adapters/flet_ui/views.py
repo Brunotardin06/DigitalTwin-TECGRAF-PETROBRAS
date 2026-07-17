@@ -667,7 +667,7 @@ def build_sidebar(on_navigate: Callable[[str], None]) -> tuple[ft.Container, dic
         ("Artifacts", _icon_value("FOLDER_OPEN_OUTLINED", "folder_open_outlined")),
     ]:
         btn = ft.TextButton(
-            content=label,
+            text=label,
             icon=icon,
             style=ft.ButtonStyle(
                 color="#D2D9E6",

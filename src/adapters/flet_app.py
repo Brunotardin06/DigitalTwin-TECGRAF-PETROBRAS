@@ -123,12 +123,18 @@ def main(page: ft.Page) -> None:
     event_queue: queue.Queue = queue.Queue()
 
     def show_message(message: str, *, error: bool = False) -> None:
-        page.snack_bar = ft.SnackBar(
+        snack = ft.SnackBar(
             content=ft.Text(message),
             bgcolor="#B91C1C" if error else "#1E3A8A",
         )
-        page.snack_bar.open = True
-        page.update()
+        # Flet classico (<=0.28) usa page.open(); o atributo page.snack_bar
+        # foi removido. Mantem fallback para versoes antigas.
+        if hasattr(page, "open"):
+            page.open(snack)
+        else:
+            page.snack_bar = snack
+            page.snack_bar.open = True
+            page.update()
 
     selected_zip_text = ft.Text("Nenhum arquivo selecionado", color="#4B6385")
     selected_current_dataset_text = ft.Text(
@@ -1189,81 +1195,95 @@ def main(page: ft.Page) -> None:
         append_log("Cancel requested by user.")
         page.update()
 
-    async def choose_zip_async() -> None:
-        files = await file_picker.pick_files(
-            allow_multiple=False,
-            file_type=getattr(ft, "FilePickerFileType", None).CUSTOM
-            if getattr(ft, "FilePickerFileType", None) is not None
-            else "custom",
-            allowed_extensions=["zip"],
+    # Selecao de arquivos. No Flet classico (0.28) pick_files() NAO e awaitable:
+    # dispara o dialogo e o resultado chega pelo callback on_result. Como ha
+    # tres botoes diferentes, guardamos qual handler deve tratar o proximo
+    # resultado e roteamos em _on_file_picker_result.
+    _pending_file_handler: dict = {"fn": None}
+
+    def _warn_no_path() -> None:
+        show_message(
+            "Nao foi possivel obter o caminho do arquivo. No modo web o navegador "
+            "nao expoe o caminho local do arquivo - rode o app em modo desktop.",
+            error=True,
         )
+
+    def _result_choose_zip(files: list) -> None:
         if not files:
             return
         selected_path = files[0].path
         if not selected_path:
+            _warn_no_path()
             return
         state["selected_zip"] = selected_path
         selected_zip_text.value = selected_path
         stochastic_selected_zip_text.value = selected_path
         page.update()
 
-    def choose_zip(e: ft.ControlEvent) -> None:
-        page.run_task(choose_zip_async)
-
-    async def choose_current_dataset_async() -> None:
-        files = await file_picker.pick_files(
-            allow_multiple=True,
-            file_type=getattr(ft, "FilePickerFileType", None).CUSTOM
-            if getattr(ft, "FilePickerFileType", None) is not None
-            else "custom",
-            allowed_extensions=["nc"],
-        )
+    def _result_choose_dataset(files: list, state_key: str, label_text, stochastic_label_text) -> None:
         if not files:
             return
         selected_paths = [item.path for item in files if item.path]
         if not selected_paths:
+            _warn_no_path()
             return
-        state["selected_current_datasets"] = selected_paths
+        state[state_key] = selected_paths
         selected_label = (
-            f"{len(selected_paths)} arquivo(s): " + ", ".join(Path(path).name for path in selected_paths[:3])
+            f"{len(selected_paths)} arquivo(s): "
+            + ", ".join(Path(path).name for path in selected_paths[:3])
         )
         if len(selected_paths) > 3:
             selected_label += ", ..."
-        selected_current_dataset_text.value = selected_label
-        stochastic_selected_current_dataset_text.value = selected_label
+        label_text.value = selected_label
+        stochastic_label_text.value = selected_label
         page.update()
+
+    def _on_file_picker_result(e: "ft.FilePickerResultEvent") -> None:
+        handler = _pending_file_handler["fn"]
+        _pending_file_handler["fn"] = None
+        if handler is not None:
+            handler(e.files or [])
+
+    _file_type_custom = getattr(ft, "FilePickerFileType", None)
+    _file_type_custom = _file_type_custom.CUSTOM if _file_type_custom is not None else "custom"
+
+    def choose_zip(e: ft.ControlEvent) -> None:
+        _pending_file_handler["fn"] = _result_choose_zip
+        file_picker.pick_files(
+            allow_multiple=False,
+            file_type=_file_type_custom,
+            allowed_extensions=["zip"],
+        )
 
     def choose_current_dataset(e: ft.ControlEvent) -> None:
-        page.run_task(choose_current_dataset_async)
-
-    async def choose_wind_dataset_async() -> None:
-        files = await file_picker.pick_files(
+        _pending_file_handler["fn"] = lambda files: _result_choose_dataset(
+            files, "selected_current_datasets",
+            selected_current_dataset_text, stochastic_selected_current_dataset_text,
+        )
+        file_picker.pick_files(
             allow_multiple=True,
-            file_type=getattr(ft, "FilePickerFileType", None).CUSTOM
-            if getattr(ft, "FilePickerFileType", None) is not None
-            else "custom",
+            file_type=_file_type_custom,
             allowed_extensions=["nc"],
         )
-        if not files:
-            return
-        selected_paths = [item.path for item in files if item.path]
-        if not selected_paths:
-            return
-        state["selected_wind_datasets"] = selected_paths
-        selected_label = (
-            f"{len(selected_paths)} arquivo(s): " + ", ".join(Path(path).name for path in selected_paths[:3])
-        )
-        if len(selected_paths) > 3:
-            selected_label += ", ..."
-        selected_wind_dataset_text.value = selected_label
-        stochastic_selected_wind_dataset_text.value = selected_label
-        page.update()
 
     def choose_wind_dataset(e: ft.ControlEvent) -> None:
-        page.run_task(choose_wind_dataset_async)
+        _pending_file_handler["fn"] = lambda files: _result_choose_dataset(
+            files, "selected_wind_datasets",
+            selected_wind_dataset_text, stochastic_selected_wind_dataset_text,
+        )
+        file_picker.pick_files(
+            allow_multiple=True,
+            file_type=_file_type_custom,
+            allowed_extensions=["nc"],
+        )
 
-    file_picker = ft.FilePicker()
-    page.services.append(file_picker)
+    file_picker = ft.FilePicker(on_result=_on_file_picker_result)
+    # Flet classico (<=0.28) registra o FilePicker em page.overlay; versoes
+    # novas (1.x) usam page.services. Suporta ambos.
+    if hasattr(page, "overlay"):
+        page.overlay.append(file_picker)
+    else:
+        page.services.append(file_picker)
 
     views = {
         "Validation Setup": build_setup_view(
@@ -1398,4 +1418,13 @@ def main(page: ft.Page) -> None:
 
 
 if __name__ == "__main__":
-    ft.app(target=main)
+    import os
+
+    # Por padrao abre a janela nativa (desktop). Se o cliente desktop do Flet
+    # nao puder subir (ex.: falta libmpv.so.1 no sistema), rode em modo web:
+    #   FLET_VIEW=web python -m src.adapters.flet_app
+    # e abra http://localhost:8550 no navegador.
+    if os.environ.get("FLET_VIEW", "desktop").lower() == "web":
+        ft.app(target=main, view=ft.AppView.WEB_BROWSER, port=8550)
+    else:
+        ft.app(target=main)
