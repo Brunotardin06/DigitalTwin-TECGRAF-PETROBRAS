@@ -542,7 +542,7 @@ def build_deterministic_view(bindings: DeterministicViewBindings) -> ft.Containe
                 ),
                 ft.Text(
                     "Prevê a deriva de um vazamento a partir de um ponto, data e "
-                    "duração — sem depender de manchas observadas.",
+                    "duração, sem depender de manchas observadas.",
                     size=16,
                     color="#4B6385",
                 ),
