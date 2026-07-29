@@ -1,2 +1,2 @@
-"""Application package for oil spill optimization and simulation."""
+"""Simulador de deriva de oleo: validacao deterministica e ensemble estocastico."""
 

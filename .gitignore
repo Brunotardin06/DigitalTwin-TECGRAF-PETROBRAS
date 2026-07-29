@@ -1,10 +1,22 @@
-
 documentos/
 __pycache__/
 *.pyc
 .venv/
 venv/
 env/.venv/
-analysis/*.nc
-analysis/BaixadoDia4/
-analysis/BaixadoDia5/
+
+# dados de analise (caminho mudou na reorganizacao: analysis/ -> scripts/analysis/)
+scripts/analysis/*.nc
+scripts/analysis/BaixadoDia4/
+scripts/analysis/BaixadoDia5/
+
+# saidas residuais de execucao
+*.log
+output_*.txt
+test_output.txt
+
+# cache regeneravel de forcing convertido
+data/cache/
+
+# staging de inputs por execucao (gravado por stage_observed_zip)
+runs/
