@@ -1,5 +1,0 @@
-Starting stochastic run 'testeruim' with 1 deterministic simulations.
-Fixed grid: lon=[-43.199576,-37.960260] lat=[-24.849532,-20.427510] resolution=0.001 crs=EPSG:4326
-[1/1] cdf=0.991674 wdf=0.0339882 tau=1620s seed=70
-Aggregated 1 valid simulations into raster, final-timestep, and 44 hourly maps.
-Finished stochastic run: 1 success, 0 failed, output=/home/btardinfernandes/Imagens/simulador_dia_4_maio/oil-drift-simulations/data/2-simulated/stochastic/testeruim

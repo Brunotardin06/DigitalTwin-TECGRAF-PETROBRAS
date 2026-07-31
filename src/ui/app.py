@@ -358,7 +358,6 @@ def main(page: ft.Page) -> None:
     stochastic_run_name_field = ft.TextField(label="Run name", value="", width=240)
     stochastic_n_simulations_field = ft.TextField(label="N simulations", value="10", width=160)
     stochastic_number_of_workers_field = ft.TextField(label="Number of workers", value="4", width=180)
-    stochastic_seed_field = ft.TextField(label="Seed", value="42", width=120)
 
     stochastic_cdf_enabled_checkbox = ft.Checkbox(label="Vary CDF", value=True)
     stochastic_cdf_mean_field = ft.TextField(label="CDF mean", value="1.0", width=130)
@@ -920,8 +919,10 @@ def main(page: ft.Page) -> None:
         current_dataset_paths: list[str],
         wind_dataset_paths: list[str],
     ) -> StochasticValidationRunRequest:
-        seed_raw = (stochastic_seed_field.value or "").strip()
-        seed = int(seed_raw) if seed_raw else None
+        # Sem campo de semente na interface, cada execucao sorteia a sua. O
+        # valor efetivamente usado fica gravado no config.json do run, entao a
+        # execucao continua reproduzivel depois do fato.
+        seed = None
         n_simulations = int(stochastic_n_simulations_field.value or 0)
         number_of_workers = int(stochastic_number_of_workers_field.value or 4)
         run_name = (stochastic_run_name_field.value or "").strip() or run_id
@@ -1621,7 +1622,6 @@ def main(page: ft.Page) -> None:
                 run_name_field=stochastic_run_name_field,
                 n_simulations_field=stochastic_n_simulations_field,
                 number_of_workers_field=stochastic_number_of_workers_field,
-                seed_field=stochastic_seed_field,
                 cdf_enabled_checkbox=stochastic_cdf_enabled_checkbox,
                 cdf_mean_field=stochastic_cdf_mean_field,
                 cdf_std_field=stochastic_cdf_std_field,

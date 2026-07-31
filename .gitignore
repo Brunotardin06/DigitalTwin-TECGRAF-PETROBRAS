@@ -1,22 +1,59 @@
-documentos/
+# ---------------------------------------------------------------
+# Credenciais - NUNCA versionar
+# ---------------------------------------------------------------
+copernicus_login*.json
+.env
+*.pem
+*.key
+
+# ---------------------------------------------------------------
+# Ambientes virtuais e caches Python
+# ---------------------------------------------------------------
 __pycache__/
-*.pyc
+*.py[cod]
 .venv/
 venv/
 env/.venv/
+*.egg-info/
+.ipynb_checkpoints/
+.pytest_cache/
 
-# dados de analise (caminho mudou na reorganizacao: analysis/ -> scripts/analysis/)
-scripts/analysis/*.nc
+# ---------------------------------------------------------------
+# Dados: entradas brutas, cache de forcing e saidas de simulacao
+# Nao sao codigo; sao baixados/regerados pelo proprio software
+# ---------------------------------------------------------------
+data/
+runs/
+documentos/
+
+# ---------------------------------------------------------------
+# Arquivos cientificos pesados em qualquer ponto da arvore
+# ---------------------------------------------------------------
+*.nc
+*.nc4
+*.grib
+*.grib2
+*.zip
+
+# ---------------------------------------------------------------
+# Saidas de analise (figuras e animacoes geradas pelos scripts)
+# ---------------------------------------------------------------
+scripts/analysis/gifs/
+scripts/analysis/modelos/
 scripts/analysis/BaixadoDia4/
 scripts/analysis/BaixadoDia5/
 
-# saidas residuais de execucao
+# ---------------------------------------------------------------
+# Logs e saidas residuais de execucao
+# ---------------------------------------------------------------
 *.log
 output_*.txt
 test_output.txt
 
-# cache regeneravel de forcing convertido
-data/cache/
-
-# staging de inputs por execucao (gravado por stage_observed_zip)
-runs/
+# ---------------------------------------------------------------
+# Configuracao de editor / sistema operacional
+# ---------------------------------------------------------------
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

@@ -1,4 +1,0 @@
-simulation_id,seed,cdf,wdf,temporal_lag_original_value,temporal_lag_input_unit,temporal_lag_rounding_granularity,temporal_lag_seconds,status,error_message,output_path
-0,51,0.539911335751533,0.037648408243696675,12.524723497116305,hours,seconds,45089.0,success,,/home/btardinfernandes/Imagens/simulador_dia_4_maio/oil-drift-simulations/data/2-simulated/stochastic/teste10/individual_runs/run_0000/simulation.nc
-1,52,1.1940045608956842,0.0328929142563547,-0.9436370601295727,hours,seconds,-3397.0,success,,/home/btardinfernandes/Imagens/simulador_dia_4_maio/oil-drift-simulations/data/2-simulated/stochastic/teste10/individual_runs/run_0001/simulation.nc
-2,53,1.0837453297058584,0.023484460046416557,5.7793523298173985,hours,seconds,20806.0,success,,/home/btardinfernandes/Imagens/simulador_dia_4_maio/oil-drift-simulations/data/2-simulated/stochastic/teste10/individual_runs/run_0002/simulation.nc
